@@ -81,39 +81,42 @@ const KITS = {
   },
 
   speedlego: {
-    tip: "Tap 🎲 for a build. Each card has a brick limit and its own timer.",
+    tip: "Tap 🎲 for a build. Use as many bricks as you want, or try 🧱 Hard mode for a brick limit.",
     decks: [
-      {name:"Super easy (2–3 bricks)", level:"easy", secs:30, items:[
-        "🚦 Traffic light: 3 bricks, red, yellow and green", "⛄ Snowman: 3 bricks stacked", "🍭 Popsicle: 2 bricks, one long and one small for the stick",
-        "🚩 Flag: 2 bricks, one tall pole and one flag", "🕯️ Candle", "✏️ Pencil", "🁫 Domino", "⚔️ Sword",
-        {q:"🗼 Tower: stack as many bricks as you can. Tallest that doesn't fall wins!", secs:30},
-        "🌈 Rainbow stack: one brick of every color you can find"]},
-      {name:"Easy & fun (4–5 bricks)", level:"easy", secs:60, items:[
-        "🦆 Duck", "🐟 Fish", "🪱 Worm", "🍦 Ice cream cone", "🌳 Tree", "🤖 Robot face",
-        {q:"🍄 Mushroom: 4 bricks, one stem and a wide cap. Bonus for spots!", secs:60}, "🍪 Cookie", "🛏️ Bed",
-        {q:"🍔 Hamburger: brown bun, green lettuce, red tomato, brown bun. No limit, no rush.", secs:120}]},
+      {name:"Super easy", level:"easy", secs:30, items:[
+        "🚦 Traffic light: red, yellow and green", "⛄ Snowman", "🍭 Popsicle", "🚩 Flag", "🕯️ Candle", "✏️ Pencil", "🁫 Domino", "⚔️ Sword",
+        "🗼 Tower: stack as tall as you can. Tallest that doesn't fall wins!", "🌈 Rainbow stack: one brick of every color you can find"]},
+      {name:"Easy & fun", level:"easy", secs:60, items:[
+        "🦆 Duck", "🐟 Fish", "🪱 Worm", "🍦 Ice cream cone", "🌳 Tree", "🤖 Robot face", "🍄 Mushroom: bonus for spots!", "🍪 Cookie", "🛏️ Bed",
+        {q:"🍔 Hamburger: brown bun, green lettuce, red tomato, brown bun", secs:120}]},
       {name:"Animals", level:"medium", secs:90, items:[
-        "Snake", "Penguin", "Turtle", "Bird on a branch", "Dog", "Spider", "Crab",
-        {q:"🐌 Snail: 5 bricks max", secs:60}, "Owl", {q:"🐸 Frog: 6 bricks max", secs:90}, "Bunny", "Bat", "Butterfly", "Shark", "Pig", "Ladybug", "Whale", "Giraffe"]},
+        "Snake", "Penguin", "Turtle", "Bird on a branch", "Dog", "Spider", "Crab", "🐌 Snail", "Owl", "🐸 Frog", "Bunny", "Bat", "Butterfly", "Shark", "Pig", "Ladybug", "Whale", "Giraffe"]},
       {name:"Things that move", level:"medium", secs:90, items:[
         "Race car", "Skateboard", "Wagon", "Shopping cart", "Tractor", "Airplane", "Boat", "Helicopter", "Train", "Motorcycle", "Hot air balloon", "Submarine", "Rocket", "{grown}'s car"]},
       {name:"Food", level:"medium", secs:90, items:[
         "Ice cream cone", "Slice of pizza", "Carrot", "Cupcake", "Taco", "Hot dog", "Donut", "Sandwich", "Birthday cake", "Strawberry", "Watermelon slice"]},
       {name:"Everyday stuff", level:"medium", secs:90, items:[
         "Chair", "Lamp", "Phone", "TV", "Mailbox", "Trophy", "Key", "Hammer", "Table", "Toothbrush", "Umbrella", "Clock", "Backpack", "Cup", "Fork", "Glasses"]},
-      {name:"Silly & wild", level:"hard", secs:90, items:[
-        "A robot with only 5 bricks", "A monster with 3 eyes", "A monster with one giant eye", "An alien spaceship", "A flower in a pot",
+      {name:"Silly & wild", level:"medium", secs:90, items:[
+        "A robot", "A monster with 3 eyes", "A monster with one giant eye", "An alien spaceship", "A flower in a pot",
         "A soccer ball and goal", "A dragon", "A castle tower", "A dinosaur", "A treasure chest", "A volcano", "A ghost", "A crown", "A tiny house",
         "A UFO", "A pet rock", "A tiny alien", "A hat for your LEGO guy", "A '{grown}' sculpture: everyone builds their version!"]},
+      {name:"🧱 Hard mode: brick limit", level:"hard", secs:60, items:[
+        {q:"🍭 Popsicle", note:"2 bricks only", secs:30}, {q:"🚩 Flag", note:"2 bricks only", secs:30},
+        {q:"🚦 Traffic light", note:"3 bricks only", secs:30}, {q:"⛄ Snowman", note:"3 bricks only", secs:30},
+        {q:"🍄 Mushroom", note:"4 bricks only", secs:60}, {q:"🐌 Snail", note:"5 bricks max", secs:60},
+        {q:"🤖 Robot", note:"5 bricks max", secs:60}, {q:"🐸 Frog", note:"6 bricks max", secs:90},
+        {q:"🦆 Duck", note:"4 bricks max", secs:60}, {q:"🚀 Rocket", note:"5 bricks max", secs:60},
+        {q:"🎲 Blind grab", note:"Pull 6 bricks out without looking. Build anything using only those.", secs:90},
+        {q:"🔁 Shrinking build", note:"Build a dog with 10 bricks, then again with 5, then with 3.", secs:60}]},
       {name:"🏆 Winner takes all", level:"final", secs:60, items:[
-        {q:"Build a pet for {grown}. Any animal, real or made-up.", note:"5 bricks max · show it and say its name · vote, but not for your own · tie? a grown-up breaks it", secs:60},
-        {q:"Build the silliest monster ever.", note:"5 bricks max · give it a name and a superpower · vote for the silliest", secs:60},
-        {q:"Build a house 🏠", note:"6 bricks max · it needs a door and a roof · vote for the best house", secs:60}]}
+        {q:"Build a pet for {grown}. Any animal, real or made-up.", note:"Show it and say its name · vote, but not for your own · tie? a grown-up breaks it", secs:60},
+        {q:"Build the silliest monster ever.", note:"Give it a name and a superpower · vote for the silliest", secs:60},
+        {q:"Build a house 🏠", note:"It needs a door and a roof · vote for the best house", secs:60}]}
     ],
     twists: [
       "Speed round: 60-second timer, then everyone guesses what the others built.",
-      "Blind grab: pull 6 bricks out without looking, then build the card with only those.",
-      "Brick limit: same build three times with 10, then 5, then 3 bricks. Great challenge for the oldest.",
+      "Hard mode: pick any build and set a brick limit (great for the oldest).",
       "Guess-it: one person builds in secret, everyone guesses what it is. LEGO Pictionary! The youngest usually loves this one.",
       "Copycat: look at someone's build for 10 seconds, then copy it from memory."]
   },

@@ -666,7 +666,7 @@ function renderKit(){
   const box = $("kitBox"); if (!box || !K) return;
   const kit = KITS[K.id], c = K.card;
   const secs = c && (c.secs || c._secs);
-  const deckChips = kit.decks.map((d, di) => `<button data-deck="${di}" class="${K.deck === di ? "on" : ""}">${LV[d.level] || ""} ${esc(d.name)}</button>`).join("") +
+  const deckChips = kit.decks.map((d, di) => `<button data-deck="${di}" class="${K.deck === di ? "on" : ""}">${/^[A-Za-z]/.test(d.name) ? (LV[d.level] || "") + " " : ""}${esc(d.name)}</button>`).join("") +
     (kit.decks.length > 2 ? `<button data-deck="mix" class="${K.deck === "mix" ? "on" : ""}">🎲 Mix</button>` : "");
   const listItems = kitDeckItems(kit).map(it => `<li>${esc(fill(it.q))}${it.a ? `<br><small>→ ${esc(fill(it.a))}</small>` : ""}</li>`).join("");
   const turnBox = kit.turns ? (() => {
