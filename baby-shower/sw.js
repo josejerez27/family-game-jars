@@ -1,8 +1,8 @@
 // Bump this version whenever you change the app so devices grab the new copy.
-const CACHE = "baby-jar-v4";
+const CACHE = "baby-jar-v5";
 const FILES = ["./", "index.html", "manifest.json", "pack.js",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
-  "../fonts/fonts.css", "../fonts/baloo2-latin.woff2", "../fonts/baloo2-latin-ext.woff2", "../fonts/nunito-latin.woff2", "../fonts/nunito-latin-ext.woff2"];
+  "../shared/gate.js", "../fonts/fonts.css", "../fonts/baloo2-latin.woff2", "../fonts/baloo2-latin-ext.woff2", "../fonts/nunito-latin.woff2", "../fonts/nunito-latin-ext.woff2"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
