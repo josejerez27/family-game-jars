@@ -492,7 +492,7 @@ function showSlip(i){
     <p>${esc(i.d)}</p>
     <div class="tags">${tags.map(t => `<span class="tag">${t}</span>`).join("")}</div>
     ${jobsFor(i)}
-    ${i.need ? `<div class="box need"><b class="h">🧰 What you need</b><ul>${i.need.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
+    ${typeof i.noprops === "string" ? `<div class="box need"><b class="h">🙌 No stuff needed</b>${esc(i.noprops)}</div>` : i.need ? `<div class="box need"><b class="h">🧰 What you need</b><ul>${i.need.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>` : ""}
     ${i.steps ? `<details class="box steps" open><summary>📋 How to do it (${i.steps.length} steps)</summary><ol>${i.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol></details>` : ""}
     ${i.links ? `<div class="box links"><b class="h">🔗 Tutorials &amp; how-to</b>${i.links.map(([l, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(l)} ↗</a>`).join("")}</div>` : ""}
     ${KITS[i.id] ? `<div class="box kit" id="kitBox"></div>` : ""}
