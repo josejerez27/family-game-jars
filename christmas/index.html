@@ -111,6 +111,7 @@
   .irow .t small{display:block;color:var(--muted);font-weight:600;font-size:.78rem}
   .irow button{border:0;border-radius:10px;padding:7px 10px;font-weight:800;font-size:.85rem;flex:none;background:#f4eee6;color:var(--ink)}
   .irow .add{background:var(--green);color:#fff}
+  .irow .try{background:var(--ink);color:#fff}
   .catgroup{font:800 1rem "Baloo 2",sans-serif;margin:14px 0 2px;display:flex;align-items:center;gap:8px}
   .team{border-radius:16px;padding:12px 14px;margin-bottom:10px;color:#fff}
   .team .top{display:flex;align-items:center;gap:8px}
@@ -416,7 +417,7 @@ function showSlip(g){
       <button class="btn" id="nope">Nah, again 🔄</button>
       <button class="btn green" id="yes">We played it ✅</button>
       <button class="btn" id="planBtn" style="grid-column:1/-1">${inPlan ? "✓ In the party plan" : "📋 Add to party plan"}</button>
-      <button class="btn rm" id="rmJar">Not for this party, take it out</button>
+      <button class="btn rm" id="rmJar">${S.jar.includes(g.id) ? "Not for this party, take it out" : "➕ Put it in the jar"}</button>
     </div>`;
   s.classList.remove("hidden"); s.style.animation = "none"; void s.offsetWidth; s.style.animation = "";
   $("nope").onclick = shake;
@@ -425,7 +426,7 @@ function showSlip(g){
   if ($("slipTeams")) $("slipTeams").onclick = () => { show("Teams"); };
   $("planBtn").onclick = () => { if (!S.plan.includes(g.id)) S.plan.push(g.id); else S.plan = S.plan.filter(x => x !== g.id); save(); badge(); showSlip(g); };
   $("yes").onclick = () => { markPlayed(g); s.classList.add("hidden"); $("msg").textContent = "🎉 Nice! Logged in the Plan tab."; current = null; };
-  $("rmJar").onclick = () => { S.jar = S.jar.filter(x => x !== g.id); S.plan = S.plan.filter(x => x !== g.id); save(); badge(); drawSlips(); s.classList.add("hidden"); $("msg").textContent = `Took "${g.t}" out. Add it back from 🎲 Games.`; };
+  $("rmJar").onclick = () => { if (!S.jar.includes(g.id)){ S.jar.push(g.id); save(); drawSlips(); $("rmJar").textContent = "✓ Added to the jar!"; return; } S.jar = S.jar.filter(x => x !== g.id); S.plan = S.plan.filter(x => x !== g.id); save(); badge(); drawSlips(); s.classList.add("hidden"); $("msg").textContent = `Took "${g.t}" out. Add it back from 🎲 Games.`; };
   s.scrollIntoView({behavior:"smooth", block:"start"});
 }
 function markPlayed(g){
@@ -496,9 +497,11 @@ function renderGames(){
   $("gameList").innerHTML = order.filter(c => all.some(g => g.c === c)).map(c => `<div class="catgroup"><span class="dot" style="background:${CATS[c].hex}"></span>${esc(CATS[c].label)}</div>` +
     all.filter(g => g.c === c).map(g => { const inJ = S.jar.includes(g.id), fit = fits({...g, c:g.c});
       return `<div class="irow" style="${inJ ? "" : "opacity:.55"}"><span class="t">${esc(g.t)}<small>${g.min || 2}+ players${g.minAge ? ` · ages ${g.minAge}+` : ""}${g.who === "adults" ? " · teens/adults" : g.who === "kids" ? " · kids" : ""}${inJ && !fit ? " · doesn't fit current group" : ""}</small></span>
+      <button class="try" data-try="${g.id}">▶ Try</button>
       ${inJ ? `<button data-plan="${g.id}">${S.plan.includes(g.id) ? "✓ Plan" : "+ Plan"}</button><button data-rm="${g.id}">Remove</button>` : `<button class="add" data-add="${g.id}">+ Add</button>`}</div>`; }).join("")).join("");
 }
 $("gameList").onclick = e => { const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.try){ const g = byId(b.dataset.try); if (g){ show("Jar"); $("msg").textContent = ""; showSlip(g); } return; }
   if (b.dataset.add) S.jar.push(b.dataset.add);
   if (b.dataset.rm){ S.jar = S.jar.filter(x => x !== b.dataset.rm); S.plan = S.plan.filter(x => x !== b.dataset.rm); }
   if (b.dataset.plan){ const id = b.dataset.plan; S.plan = S.plan.includes(id) ? S.plan.filter(x => x !== id) : S.plan.concat(id); }
