@@ -1,0 +1,132 @@
+// ===== Baby Shower Game Jar =====
+const YT = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+const THEME = {
+  key: "babyjar1",
+  name: "Baby Shower Game Jar",
+  titleHTML: "🍼 Baby Shower<br><span>Game Jar</span>",
+  setupSub: "Who's at the shower?",
+  jarLabel: "OH BABY!",
+  deco: ["♥", "✦", "☁", "★"],
+  colors: {bg:"#fdf8f4", ink:"#3d405b", accent:"#d9694c", accentDark:"#a84b33", jar:"#eaf4f4", jarEdge:"#b8dcd6", lid:"#81b29a", tabOn:"#fdeee8", deco:"#efc6b8"},
+  teamNames: ["Bottles", "Booties", "Rattles", "Binkies", "Onesies", "Teddy Bears", "Lullabies", "Blankets"],
+  teamColors: ["#d9694c", "#3d405b", "#5f9e80", "#4f7cd9", "#a463d6", "#c28a12"]
+};
+const CATS = {
+  guess:{label:"Guessing Games", hex:"#d9694c"},
+  quiz:{label:"Quizzes & Word Games", hex:"#5b6ee1"},
+  race:{label:"Races & Challenges", hex:"#5f9e80"},
+  mingle:{label:"Icebreakers", hex:"#c28a12"},
+  keepsake:{label:"Keepsakes & Crafts", hex:"#a463d6"},
+  kids:{label:"For the Kids", hex:"#e879a6"},
+  custom:{label:"Our Games", hex:"#64748b"}
+};
+const BABY_PROMPTS = "Changing a diaper · Burping a baby · Rocking a baby to sleep · Pushing a stroller · Crawling · First steps · A 3 a.m. feeding · Swaddling · Giving a bath · Baby's first bite of food · Teething · A baby giggling · Packing the diaper bag · Putting together a crib · Baby throwing food · A sleepy parent · Taking baby photos · Peekaboo";
+
+// Fields: id, t, c, where, time (quick/med), min, minAge, who (all/kids/adults), teams, timer, d, need, steps, tip, extra, links
+const GAMES = [
+  // ----- GUESSING -----
+  {id:"bump", t:"Guess the bump", c:"guess", where:"in", time:"quick", min:3, minAge:8,
+   d:"Everyone cuts a piece of ribbon or yarn they think will fit exactly around the mom-to-be's belly. Closest one wins!",
+   need:["Ribbon or yarn","Scissors","Tape and a poster to stick the pieces on (optional)"],
+   steps:["Pass around the ribbon and scissors.","Each guest cuts a piece without measuring.","Write names on tape flags on each piece.","Mom-to-be tries them on one by one (the too-long ones get laughs).","Closest without going way over wins."]},
+  {id:"babyfood", t:"Baby food taste test", c:"guess", where:"in", time:"quick", min:2, minAge:6,
+   d:"Cover the labels on 6–8 jars of baby food. Guests taste (or smell) and guess the flavor.",
+   need:["6–8 jars of baby food","Paper to cover labels, numbered","Little spoons","Answer slips"],
+   tip:"Mix in a tricky one like sweet potato & apple or peas & mint."},
+  {id:"pricebaby", t:"The price is right: baby edition", c:"guess", where:"in", time:"quick", min:2, minAge:10,
+   d:"Show 8–10 baby items with prices hidden. Guests write their guesses. Closest without going over wins each round.",
+   need:["Baby items (diapers, wipes, bottles, cream, pacifier)","The real prices written down","Answer slips"]},
+  {id:"predictions", t:"Baby predictions", c:"guess", where:"in", time:"quick", min:1, minAge:8,
+   d:"Guests fill out a card: birth date, time, weight, length, hair color, eye color and who baby will look like. Open them after baby arrives!",
+   need:["Prediction cards or paper","An envelope or box to keep them in"]},
+  {id:"jarguess", t:"How many in the bottle?", c:"guess", where:"in", time:"quick", min:2, minAge:5,
+   d:"Fill a baby bottle or jar with jellybeans, mini marshmallows or pacifier candies. Closest guess takes it home.",
+   need:["Baby bottle or jar","Small candies","Paper slips"]},
+  {id:"dirtydiaper", t:"Melted chocolate diapers", c:"guess", where:"in", time:"quick", min:2, minAge:8,
+   d:"Melt a different candy bar inside each of 6–8 diapers (yes, it looks gross!). Guests guess which candy bar is in each one.",
+   need:["6–8 newborn diapers","6–8 different candy bars","Microwave","Numbered labels and answer slips"],
+   steps:["Before the party, put each candy bar in a diaper and microwave 10–15 seconds to melt it a bit.","Number the diapers and write down the answers.","Pass them around. Look, smell, no tasting (or tasting if you're brave!).","Most correct answers wins."],
+   links:[["Video: melted candy bar game",YT("baby shower melted candy bar diaper game")]]},
+  {id:"babypics", t:"Whose baby picture?", c:"guess", where:"in", time:"quick", min:4, minAge:10,
+   d:"Collect a baby photo from each guest before the party. Number them on a board. Guests guess who's who.",
+   need:["Baby photos from guests (ask with the invite)","A poster board","Answer slips"]},
+
+  // ----- QUIZZES & WORD GAMES -----
+  {id:"mommyquiz", t:"Who knows mom best?", c:"quiz", where:"in", time:"quick", min:2, minAge:10,
+   d:"Read questions about the mom-to-be. Guests write their answers, then she reveals the real ones.",
+   extra:{title:"❓ Question ideas", body:"What's her favorite food craving right now? · What's her go-to comfort show? · Where did she grow up? · Where was her first date with her partner? · What's her biggest pet peeve? · What will she say first when baby arrives? · Coffee, tea or soda? · What was her first job? · What's she most excited to teach the baby? · What's her dream vacation?"}},
+  {id:"whosaid", t:"Mom or dad said it?", c:"quiz", where:"in", time:"quick", min:3, minAge:10,
+   d:"Before the party, ask both parents-to-be the same questions. Read an answer and guests guess who said it.",
+   extra:{title:"❓ Questions to ask them", body:"Who will change the most diapers? · Who's the bigger softie? · Who will be the strict parent? · Who will cry first at the birth? · Who's more likely to lose the pacifier? · What's the funniest baby name you've joked about? · What are you most nervous about? · What song will you sing to the baby?"}},
+  {id:"rhymes", t:"Finish the nursery rhyme", c:"quiz", where:"in", time:"quick", min:2, minAge:6, teams:true, timer:["down",3],
+   d:"Read the start of a classic nursery rhyme. First team to finish the line gets the point.",
+   extra:{title:"📖 Rhymes (answers in brackets)", body:"Twinkle, twinkle, little star... [how I wonder what you are]\nHumpty Dumpty sat on a wall... [Humpty Dumpty had a great fall]\nJack and Jill went up the hill... [to fetch a pail of water]\nHey diddle diddle, the cat and the fiddle... [the cow jumped over the moon]\nHickory dickory dock... [the mouse ran up the clock]\nBaa, baa, black sheep, have you any wool? [Yes sir, yes sir, three bags full]\nLittle Miss Muffet sat on a tuffet... [eating her curds and whey]\nLittle Bo Peep has lost her sheep... [and doesn't know where to find them]\nMary had a little lamb... [its fleece was white as snow]\nRock-a-bye baby, on the treetop... [when the wind blows, the cradle will rock]"}},
+  {id:"animals", t:"Baby animal names", c:"quiz", where:"in", time:"quick", min:2, minAge:7, teams:true, timer:["down",3],
+   d:"What do you call a baby kangaroo? Read the animals, teams write the baby names.",
+   extra:{title:"🐣 Animals (answers in brackets)", body:"Kangaroo [joey] · Swan [cygnet] · Owl [owlet] · Goose [gosling] · Deer [fawn] · Horse [foal] · Goat [kid] · Bear [cub] · Pig [piglet] · Sheep [lamb] · Frog [tadpole] · Eagle [eaglet] · Cow [calf] · Hare [leveret] · Platypus [puggle] · Cat [kitten]"}},
+  {id:"scramble", t:"Baby word scramble", c:"quiz", where:"in", time:"quick", min:1, minAge:8, timer:["down",3],
+   d:"Unscramble the baby words. Write them on a sheet ahead of time. Most solved in 3 minutes wins.",
+   extra:{title:"🔤 Scrambles (answers in brackets)", body:"IDPRAE [DIAPER] · LTEBOT [BOTTLE] · ECLRDA [CRADLE] · ETTRAL [RATTLE] · LRSLOTRE [STROLLER] · EABLNTK [BLANKET] · RCIFIEAP [PACIFIER] · SEOEIN [ONESIE] · YAUBLLL [LULLABY] · SEYRNRU [NURSERY] · TSOBOEI [BOOTIES] · TGNEEITH [TEETHING] · YNPAPLE [PLAYPEN] · KTOSR [STORK] · BCRI [CRIB]"}},
+  {id:"namerace", t:"Baby name A to Z race", c:"quiz", where:"in", time:"quick", min:2, minAge:8, teams:true, timer:["down",3],
+   d:"Teams race to write a baby name for every letter A–Z. Most letters filled when time's up wins. Bonus: the parents might find a name they like!",
+   need:["Paper and pens"]},
+
+  // ----- RACES & CHALLENGES -----
+  {id:"diaperrace", t:"Diaper changing race", c:"race", where:"in", time:"quick", min:2, minAge:8, timer:["up",0], teams:true,
+   d:"Race to put a diaper on a baby doll. Make it harder: blindfolded, one hand, or wearing oven mitts.",
+   need:["Baby dolls","Diapers","Blindfold or oven mitts (optional)"]},
+  {id:"bottlechug", t:"Bottle chug", c:"race", where:"in", time:"quick", min:2, who:"adults", timer:["up",0],
+   d:"Fill baby bottles with juice or soda and race to finish first, through the nipple. Harder than it looks!",
+   need:["Baby bottles","Juice, lemonade or soda"]},
+  {id:"pinpacifier", t:"Pin the pacifier on the baby", c:"race", where:"in", time:"quick", min:2, minAge:3,
+   d:"Blindfold the player, spin them, and see how close they stick the pacifier to the baby's mouth on a poster.",
+   need:["A poster of a baby (draw one or print one)","Paper pacifiers with tape","Blindfold"]},
+  {id:"charades", t:"Baby charades", c:"race", where:"in", time:"med", min:4, minAge:6, teams:true, timer:["down",1],
+   d:"Act out baby moments with no talking. Teams guess before the timer runs out.",
+   extra:{title:"👶 Prompts", body:BABY_PROMPTS}},
+  {id:"pictionary", t:"Baby Pictionary", c:"race", where:"in", time:"med", min:4, minAge:6, teams:true, timer:["down",1],
+   d:"Draw it, don't say it! Use the baby prompts.", need:["Paper or whiteboard","Markers"], extra:{title:"🎨 Prompts", body:BABY_PROMPTS}},
+  {id:"tpbelly", t:"Toilet paper belly", c:"race", where:"in", time:"quick", min:4, minAge:8, teams:true,
+   d:"Teams use toilet paper to guess the mom-to-be's belly size. Tear off squares, then measure around her. Closest team wins.",
+   need:["Toilet paper rolls"]},
+
+  // ----- ICEBREAKERS -----
+  {id:"dontsay", t:"Don't say 'baby'", c:"mingle", where:"any", time:"med", min:4, minAge:8,
+   d:"Everyone gets a clothespin when they arrive. Say the word 'baby' and anyone who hears it can take your pin. Most pins at the end wins!",
+   need:["Clothespins (one per guest)"], tip:"Start it right as guests arrive. It runs the whole party."},
+  {id:"purse", t:"What's in your purse?", c:"mingle", where:"in", time:"quick", min:3, who:"adults",
+   d:"Read a list of items. Guests get points for each one they have in their purse or pockets. Most points wins.",
+   extra:{title:"👜 Item list (points)", body:"Lip balm (1) · Receipt older than a month (2) · Hand sanitizer (1) · Gum or mints (1) · A pacifier (5) · A bandage (2) · A safety pin (3) · A photo (3) · A snack (2) · A hair tie (1) · Something sticky (3) · A toy (4) · Over 5 pens (5)"}},
+  {id:"advice", t:"Advice & wishes cards", c:"mingle", where:"in", time:"quick", min:1, minAge:6,
+   d:"Guests write advice for the parents and wishes for the baby. Make a few funny: 'Best tip for surviving the first month.'",
+   need:["Cards or paper","Pens","A box or jar"]},
+  {id:"raffle", t:"Diaper raffle", c:"mingle", where:"in", time:"quick", min:3, minAge:0,
+   d:"Every pack of diapers a guest brings = one raffle ticket. Draw a winner near the end. The parents get a stockpile!",
+   need:["Raffle tickets","A prize"], tip:"Mention it on the invitation so people know to bring diapers."},
+
+  // ----- KEEPSAKES & CRAFTS -----
+  {id:"onesies", t:"Onesie decorating station", c:"keepsake", where:"in", time:"med", min:1, minAge:5,
+   d:"Guests decorate plain onesies with fabric markers. The parents pick a favorite and get a whole drawer of one-of-a-kind outfits.",
+   need:["Plain white onesies in different sizes","Fabric markers","Cardboard to put inside so ink doesn't bleed through"]},
+  {id:"bookwishes", t:"Sign a storybook", c:"keepsake", where:"in", time:"quick", min:1, minAge:5,
+   d:"Instead of a card, guests bring a favorite children's book and write a note inside the cover for the baby."},
+  {id:"latenight", t:"Late-night diaper messages", c:"keepsake", where:"in", time:"quick", min:1, minAge:6,
+   d:"Guests write funny or sweet notes on diapers with a marker. Parents find them during 3 a.m. changes.",
+   need:["A pack of diapers","Markers"]},
+  {id:"bracelets", t:"Baby blocks stack", c:"keepsake", where:"in", time:"quick", min:1, minAge:3,
+   d:"Guests decorate wooden blocks with paint pens. They become nursery decor and the baby's first toys later.",
+   need:["Wooden blocks","Paint pens (non-toxic)"]},
+
+  // ----- FOR THE KIDS -----
+  {id:"bigsib", t:"Big brother / big sister cards", c:"kids", where:"in", time:"quick", min:1, minAge:3, who:"kids",
+   d:"Kids make cards or drawings for the new baby. Big siblings get to be the official 'baby helpers' for the party.",
+   need:["Paper","Crayons, stickers"]},
+  {id:"dollbath", t:"Baby doll bath race", c:"kids", where:"any", time:"quick", min:2, minAge:3, who:"kids", timer:["up",0],
+   d:"Give each kid a doll, a washcloth and a tub of water. Wash, dry, diaper and wrap the doll in a blanket. Fastest gentle parent wins!",
+   need:["Baby dolls","Small tubs of water","Washcloths and towels","Diapers and blankets"]},
+  {id:"stork", t:"Stork, stork, baby", c:"kids", where:"any", time:"quick", min:4, minAge:3, who:"kids",
+   d:"Like duck, duck, goose: kids sit in a circle and the stork taps heads saying 'stork, stork...' until they shout 'BABY!' and run."},
+  {id:"rattlehunt", t:"Rattle hunt", c:"kids", where:"any", time:"quick", min:1, minAge:2, who:"kids",
+   d:"Hide baby rattles or pacifiers around the room or yard. Kids hunt for them. Each find = a small treat.",
+   need:["Rattles or plastic pacifiers","Small treats"]}
+];
