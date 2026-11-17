@@ -1,5 +1,5 @@
 // Bump this version whenever you change the app so devices grab the new copy.
-const CACHE = "baby-jar-v1";
+const CACHE = "baby-jar-v2";
 const FILES = ["./", "index.html", "manifest.json", "pack.js",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png"];
 

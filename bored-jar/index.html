@@ -32,6 +32,7 @@
   .btn.dark{background:var(--ink);color:#fff}
   .btn.green{background:var(--green);color:#fff}
   .btn.full{width:100%}
+  .btn.needtimer{grid-column:1/-1;background:transparent;border:2px dashed var(--line);color:var(--muted);padding:10px}
   .big{display:block;width:100%;border:0;border-radius:16px;padding:16px;font:800 1.3rem "Baloo 2",sans-serif;
     background:var(--orange);color:#fff;box-shadow:0 5px 0 #c2570c;margin-top:8px}
   .big:active{transform:translateY(3px);box-shadow:0 2px 0 #c2570c}
@@ -490,7 +491,7 @@ function showSlip(i){
     ${KITS[i.id] ? `<div class="box kit" id="kitBox"></div>` : ""}
     <div id="timerBox"></div>
     <div class="actions">
-      <button class="startbtn" id="startBtn">▶ Let's start!</button>
+      ${startBtnHTML(i)}
       <button class="btn" id="nope">Nah, again 🔄</button>
       <button class="btn green" id="yes">We did it! ✅</button>
       <button class="btn rm" id="rmJar">Not for us, take it out of the jar</button>
@@ -529,6 +530,12 @@ function remaining(){ return T.total - elapsed(); }
 function defaultsFor(i){
   if (i.timer) return {mode:i.timer[0], min:i.timer[1] || 15};
   return i.time === "quick" ? {mode:"down", min:15} : i.time === "med" ? {mode:"down", min:30} : {mode:"up", min:30};
+}
+function timeLabel(min){ return min < 1 ? Math.round(min * 60) + "-sec" : min + "-min"; }
+function startBtnHTML(g){
+  if (!g.timer) return `<button class="btn needtimer" id="startBtn">⏱️ Need a timer?</button>`;
+  const d = defaultsFor(g);
+  return `<button class="startbtn" id="startBtn">${d.mode === "up" ? "⏱️ Start the stopwatch" : `⏳ Start ${timeLabel(d.min)} timer`}</button>`;
 }
 function unlockAudio(){ try{ audio = audio || new (window.AudioContext || window.webkitAudioContext)(); if (audio.state === "suspended") audio.resume(); }catch(e){} }
 function beep(){
