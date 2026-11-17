@@ -209,6 +209,10 @@
       <div class="chips" data-f="where">
         <button class="chip on" data-v="any">Anywhere</button><button class="chip" data-v="in">Inside 🏠</button><button class="chip" data-v="out">Outside ☀️</button>
       </div>
+      <div class="flabel">Stuff needed</div>
+      <div class="chips" data-f="props">
+        <button class="chip on" data-v="any">Doesn't matter</button><button class="chip" data-v="none">🙌 No stuff needed</button>
+      </div>
       <div class="flabel">How much time</div>
       <div class="chips" data-f="time">
         <button class="chip on" data-v="any">Any</button><button class="chip" data-v="quick">~15 min</button><button class="chip" data-v="med">~1 hour</button><button class="chip" data-v="big">Big project</button>
@@ -299,7 +303,7 @@ function loadState(){ try{ const v = localStorage.getItem(KEY); return v ? JSON.
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
 let S = loadState() || {family:[], playing:[], jar:null, custom:[], done:[]};
-let F = {where:"any", time:"any", cats:[]};
+let F = {where:"any", time:"any", cats:[], props:"any"};
 let used = new Set(), current = null;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -383,6 +387,7 @@ function fits(i){
   const kids = leadKids();
   if (kids.length && i.age > kids[kids.length - 1].age) return false;
   if (F.cats.length && !F.cats.includes(i.c)) return false;
+  if (F.props === "none" && !i.noprops) return false;
   if (i.adult && hasAdultsInFamily() && !grownUpPlaying()) return false;
   if (F.where !== "any" && i.where !== "any" && i.where !== F.where) return false;
   if (F.time !== "any" && i.time !== "any" && i.time !== F.time) return false;
@@ -480,6 +485,7 @@ function showSlip(i){
     i.age <= 1 ? "👶 Any age" : `🎂 Ages ${i.age}+`,
   ];
   if (i.adult) tags.push("🧑 Grown-up helps");
+  if (i.noprops) tags.push("🙌 No stuff needed");
   s.innerHTML = `
     <span class="cat">${cat.label}</span>
     <h2>${esc(i.t)}</h2>
@@ -707,7 +713,7 @@ document.addEventListener("click", e => {
 
 // ---------- ideas tab ----------
 function row(i, inJar){
-  const meta = [i.age <= 1 ? "any age" : `ages ${i.age}+`, i.adult ? "grown-up helps" : "", i.steps ? "has how-to" : ""].filter(Boolean).join(" · ");
+  const meta = [i.noprops ? "🙌 no stuff" : "", i.age <= 1 ? "any age" : `ages ${i.age}+`, i.adult ? "grown-up helps" : "", i.steps ? "has how-to" : ""].filter(Boolean).join(" · ");
   return `<div class="irow"><span class="dot" style="background:${CATS[i.c].hex}"></span>
     <span class="t">${esc(i.t)}<small>${meta}</small></span>
     <button class="try" data-try="${i.id}">▶ Try</button>

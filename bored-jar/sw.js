@@ -1,5 +1,5 @@
 // Bump this version whenever you change the app so devices grab the new copy.
-const CACHE = "bored-jar4-v5";
+const CACHE = "bored-jar4-v6";
 const FILES = ["./", "index.html", "manifest.json", "ideas.js", "kits.js",
   "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png", "icons/apple-touch-icon.png",
   "../fonts/fonts.css", "../fonts/baloo2-latin.woff2", "../fonts/baloo2-latin-ext.woff2", "../fonts/nunito-latin.woff2", "../fonts/nunito-latin-ext.woff2"];
