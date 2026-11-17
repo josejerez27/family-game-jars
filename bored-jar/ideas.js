@@ -163,7 +163,7 @@ const IDEAS = [
    d:"Find something smooth, something red, a Y-shaped stick, a bug, three kinds of leaves. First to finish wins."},
   {id:"chalk", t:"Sidewalk chalk city", c:"outside", where:"out", time:"med", age:6, adult:false,
    d:"Draw roads, stores and houses, then ride bikes or scooters through your town.", need:["Sidewalk chalk"]},
-  {id:"capture", timer:["down",20], t:"Capture the flag", c:"oldtime", where:"out", time:"med", age:6, adult:false,
+  {id:"capture", noprops:true, timer:["down",20], t:"Capture the flag", c:"oldtime", where:"out", time:"med", age:6, adult:false,
    d:"Two teams, two flags (any bandana or shirt). Tagged players go to 'jail' until a teammate frees them."},
   {id:"stars", t:"Stargazing night", c:"science", where:"out", time:"med", age:6, adult:true,
    d:"Blankets, hot cocoa, and find the Big Dipper, Orion and a planet or two.",
